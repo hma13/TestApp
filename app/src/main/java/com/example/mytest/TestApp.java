@@ -27,6 +27,8 @@ public class TestApp extends Application implements HasAndroidInjector {
         appComponent = initAppComponent();
         appComponent.inject(this);
         Timber.plant(tree);
+
+        Timber.d("app onCreate");
     }
 
     protected AppComponent initAppComponent() {
