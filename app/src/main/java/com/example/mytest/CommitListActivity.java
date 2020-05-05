@@ -39,15 +39,20 @@ public class CommitListActivity extends AppCompatActivity {
     }
 
     private void getCommits() {
-        compositeDisposable.add(dataRepo.getCommits("hma13", "TestApp", "develop").doOnSubscribe(disposable -> binding.container.setRefreshing(true)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe((commits, throwable) -> {
-            if (throwable != null) {
-                Timber.e(throwable);
-            }
-            Timber.d("size: %d", commits.size());
-            binding.container.setRefreshing(false);
-            commitListAdaptor.setCommits(commits);
-            commitListAdaptor.notifyDataSetChanged();
-        }));
+        //passes null to branchName for 'master'
+        compositeDisposable.add(dataRepo.getCommits("hma13", "TestApp", null)
+                .doOnSubscribe(disposable -> binding.container.setRefreshing(true))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doAfterTerminate(() -> binding.container.setRefreshing(false))
+                .subscribe((commits, throwable) -> {
+                    if (throwable != null) {
+                        Timber.e(throwable);
+                    } else {
+                        Timber.d("size: %d", commits.size());
+                        commitListAdaptor.setCommits(commits);
+                    }
+                }));
     }
 
 

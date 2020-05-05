@@ -74,5 +74,6 @@ class CommitListAdaptor extends ArrayAdapter<Commit> {
     public void setCommits(List<Commit> commits) {
         this.commits.clear();
         this.commits.addAll(commits);
+        notifyDataSetChanged();
     }
 }
