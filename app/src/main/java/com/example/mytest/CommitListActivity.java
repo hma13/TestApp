@@ -34,10 +34,15 @@ public class CommitListActivity extends AppCompatActivity {
 
         commitListAdaptor = new CommitListAdaptor(this);
         binding.commitList.setAdapter(commitListAdaptor);
-
-        viewModel = new ViewModelProvider(this, viewModelFactory).get(CommitListActivityViewModel.class);
         binding.container.setOnRefreshListener(() -> viewModel.fetchCommits());
 
+        initViewModel();
+
+        viewModel.fetchCommits();
+    }
+
+    private void initViewModel() {
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(CommitListActivityViewModel.class);
         viewModel.getFetchingLiveData().observe(this, fetching -> {
             binding.container.setRefreshing(Boolean.TRUE == fetching);
         });
@@ -51,8 +56,6 @@ public class CommitListActivity extends AppCompatActivity {
                 }
             }
         });
-
-        viewModel.fetchCommits();
     }
 
 
