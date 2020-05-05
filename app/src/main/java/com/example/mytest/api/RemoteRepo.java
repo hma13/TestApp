@@ -1,6 +1,6 @@
 package com.example.mytest.api;
 
-import com.example.mytest.data.CommitDetail;
+import com.example.mytest.data.Commit;
 import com.example.mytest.repo.DataRepo;
 
 import java.util.Arrays;
@@ -19,7 +19,7 @@ public class RemoteRepo implements DataRepo {
     }
 
     @Override
-    public Single<List<CommitDetail>> getCommits(String owner, String repo, String branchName) {
-        return client.getGitHubApiService().getCommits(owner, repo, branchName).doAfterSuccess(commitDetails -> Timber.d(Arrays.toString(commitDetails.toArray(new CommitDetail[0]))));
+    public Single<List<Commit>> getCommits(String owner, String repo, String branchName) {
+        return client.getGitHubApiService().getCommits(owner, repo, branchName).doAfterSuccess(commits -> Timber.d(Arrays.toString(commits.toArray(new Commit[0]))));
     }
 }

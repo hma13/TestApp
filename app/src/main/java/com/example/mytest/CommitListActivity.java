@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.mytest.databinding.ActivityCommitListBinding;
 import com.example.mytest.repo.DataRepo;
 
 import javax.inject.Inject;
@@ -18,19 +19,26 @@ public class CommitListActivity extends AppCompatActivity {
     @Inject
     DataRepo dataRepo;
     private CompositeDisposable compositeDisposable;
+    private ActivityCommitListBinding binding;
+    private CommitListAdaptor commitListAdaptor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
         compositeDisposable = new CompositeDisposable();
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_commit_list);
+        binding = ActivityCommitListBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
+        commitListAdaptor = new CommitListAdaptor(this);
+        binding.commitList.setAdapter(commitListAdaptor);
         compositeDisposable.add(dataRepo.getCommits("hma13", "TestApp", "develop").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe((commits, throwable) -> {
             if (throwable != null) {
                 Timber.e(throwable);
             }
             Timber.d("size: %d", commits.size());
+            commitListAdaptor.setCommits(commits);
+            commitListAdaptor.notifyDataSetChanged();
         }));
     }
 

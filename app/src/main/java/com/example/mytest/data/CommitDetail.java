@@ -44,6 +44,10 @@ public class CommitDetail {
         return message;
     }
 
+    public String getAuthorName() {
+        return author != null ? author.getName() : null;
+    }
+
     public static class PersonalInfo {
         private String name;
         private String email;
