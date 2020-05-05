@@ -18,7 +18,7 @@ public class RemoteRepo implements DataRepo {
     }
 
     @Override
-    public Single<List<Commit>> getCommits() {
-        return clientLazy.get().getGitHubApiService().getCommits().map(GetCommitsResponse::getCommits);
+    public Single<List<Commit>> getCommits(String owner, String repo) {
+        return clientLazy.get().getGitHubApiService().getCommits(owner, repo).map(GetCommitsResponse::getCommits);
     }
 }

@@ -7,5 +7,5 @@ import java.util.List;
 import io.reactivex.Single;
 
 public interface DataRepo {
-    Single<List<Commit>> getCommits();
+    Single<List<Commit>> getCommits(String owner, String repo);
 }
