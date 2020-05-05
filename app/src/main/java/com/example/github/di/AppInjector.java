@@ -20,12 +20,12 @@ public class AppInjector {
     private AppInjector() {
     }
 
-    public static void init(MyApp myApp) {
+    public static void inject(MyApp myApp) {
         DaggerAppComponent.builder().application(myApp).build().inject(myApp);
         myApp.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(@NotNull Activity activity, Bundle savedInstanceState) {
-                handleActivity(activity);
+                injectActivity(activity);
             }
 
             @Override
@@ -60,7 +60,7 @@ public class AppInjector {
         });
     }
 
-    private static void handleActivity(Activity activity) {
+    private static void injectActivity(Activity activity) {
         if (activity instanceof HasAndroidInjector) {
             AndroidInjection.inject(activity);
         }

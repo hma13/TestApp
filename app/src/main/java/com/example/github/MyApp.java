@@ -21,7 +21,7 @@ public class MyApp extends Application implements HasAndroidInjector {
     @Override
     public void onCreate() {
         super.onCreate();
-        AppInjector.init(this);
+        AppInjector.inject(this);
         Timber.plant(tree);
 
         Timber.d("app onCreate");
