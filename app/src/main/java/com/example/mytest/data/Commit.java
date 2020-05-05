@@ -8,6 +8,13 @@ public class Commit {
     @SerializedName("commit")
     private CommitDetail commitDetail;
 
+    public Commit() {
+    }
+
+    public Commit(String sha) {
+        this.sha = sha;
+    }
+
     public String getSha() {
         return sha;
     }

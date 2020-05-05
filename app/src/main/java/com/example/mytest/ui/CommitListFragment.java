@@ -13,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.mytest.R;
 import com.example.mytest.databinding.FragmentCommitListBinding;
-import com.example.mytest.di.MyViewModelFactory;
 
 import javax.inject.Inject;
 
@@ -27,7 +26,7 @@ public class CommitListFragment extends Fragment {
     private CommitListAdaptor commitListAdaptor;
 
     @Inject
-    MyViewModelFactory viewModelFactory;
+    ViewModelProvider.Factory viewModelFactory;
     private CommitListFragmentViewModel viewModel;
 
     @Override
