@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -29,8 +30,9 @@ public class CommitListActivityViewModel extends ViewModel {
     }
 
     void fetchCommits() {
-        //passes null to branchName for 'master'
-        disposable = dataRepo.getCommits("hma13", "TestApp", null)
+        //passes null to branchName for 'master' branch
+        Single<List<Commit>> single = dataRepo.getCommits("hma13", "TestApp", null);
+        disposable = single
                 .doOnSubscribe(disposable -> fetchingLiveData.postValue(true))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -54,11 +56,11 @@ public class CommitListActivityViewModel extends ViewModel {
         super.onCleared();
     }
 
-    public MutableLiveData<Boolean> getFetchingLiveData() {
+    MutableLiveData<Boolean> getFetchingLiveData() {
         return fetchingLiveData;
     }
 
-    public MutableLiveData<List<Commit>> getCommitsLiveData() {
+    MutableLiveData<List<Commit>> getCommitsLiveData() {
         return commitsLiveData;
     }
 }
