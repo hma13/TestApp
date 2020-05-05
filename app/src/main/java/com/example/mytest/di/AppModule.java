@@ -3,7 +3,7 @@ package com.example.mytest.di;
 import android.content.res.Resources;
 
 import com.example.mytest.BuildConfig;
-import com.example.mytest.TestApp;
+import com.example.mytest.MyApp;
 import com.example.mytest.api.GithubApiClient;
 import com.example.mytest.api.RemoteRepo;
 import com.example.mytest.repo.DataRepo;
@@ -17,7 +17,7 @@ import timber.log.Timber;
 abstract class AppModule {
 
     @Provides
-    static Resources provideResources(TestApp application) {
+    static Resources provideResources(MyApp application) {
         return application.getResources();
     }
 

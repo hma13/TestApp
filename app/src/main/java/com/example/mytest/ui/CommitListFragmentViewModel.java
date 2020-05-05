@@ -1,6 +1,7 @@
 package com.example.mytest.ui;
 
 import androidx.core.util.Pair;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -56,11 +57,11 @@ public class CommitListFragmentViewModel extends ViewModel {
         super.onCleared();
     }
 
-    MutableLiveData<Boolean> getFetchingLiveData() {
+    LiveData<Boolean> getFetchingLiveData() {
         return fetchingLiveData;
     }
 
-    MutableLiveData<Pair<List<Commit>, Throwable>> getCommitsLiveData() {
+    LiveData<Pair<List<Commit>, Throwable>> getCommitsLiveData() {
         return commitsLiveData;
     }
 }

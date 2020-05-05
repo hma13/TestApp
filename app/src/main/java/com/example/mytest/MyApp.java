@@ -2,8 +2,7 @@ package com.example.mytest;
 
 import android.app.Application;
 
-import com.example.mytest.di.AppComponent;
-import com.example.mytest.di.DaggerAppComponent;
+import com.example.mytest.di.AppInjector;
 
 import javax.inject.Inject;
 
@@ -12,27 +11,20 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasAndroidInjector;
 import timber.log.Timber;
 
-public class TestApp extends Application implements HasAndroidInjector {
+public class MyApp extends Application implements HasAndroidInjector {
     @Inject
     DispatchingAndroidInjector<Object> dispatchingAndroidInjector;
 
     @Inject
     Timber.Tree tree;
 
-    private AppComponent appComponent;
-
     @Override
     public void onCreate() {
         super.onCreate();
-        appComponent = initAppComponent();
-        appComponent.inject(this);
+        AppInjector.init(this);
         Timber.plant(tree);
 
         Timber.d("app onCreate");
-    }
-
-    protected AppComponent initAppComponent() {
-        return DaggerAppComponent.builder().application(this).build();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.example.mytest.ui;
+package com.example.mytest;
 
 import androidx.arch.core.executor.testing.CountingTaskExecutorRule;
 import androidx.test.espresso.Espresso;

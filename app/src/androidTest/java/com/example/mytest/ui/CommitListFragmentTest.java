@@ -4,10 +4,15 @@ import androidx.core.util.Pair;
 import androidx.lifecycle.MutableLiveData;
 import androidx.test.rule.ActivityTestRule;
 
+import com.example.mytest.R;
 import com.example.mytest.SingleFragmentActivity;
+import com.example.mytest.TaskExecutorWithIdlingResourceRule;
 import com.example.mytest.data.Commit;
 import com.example.mytest.util.ViewModelUtil;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -18,7 +23,9 @@ import java.util.List;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -29,26 +36,46 @@ public class CommitListFragmentTest {
     @Rule
     public TaskExecutorWithIdlingResourceRule executorRule = new TaskExecutorWithIdlingResourceRule();
 
-    private CommitListFragmentViewModel viewModel;
+    private CommitListFragmentViewModel mockViewModel;
+    private CommitListFragment listFragment;
 
     @Before
     public void setup() {
-        viewModel = mock(CommitListFragmentViewModel.class);
-        CommitListFragment listFragment = new CommitListFragment();
-
-        listFragment.viewModelFactory = ViewModelUtil.createFor(viewModel);
-        activityTestRule.getActivity().setFragment(listFragment);
+        mockViewModel = mock(CommitListFragmentViewModel.class);
+        listFragment = new CommitListFragment();
+        listFragment.viewModelFactory = ViewModelUtil.createFor(mockViewModel);
     }
 
 
     @Test
     public void testSuccess() {
-        ArrayList<Commit> list = new ArrayList<>();
-        list.add(new Commit("sha"));
+        List<Commit> list = new ArrayList<>();
+        Commit sha = new Commit("sha");
+        list.add(sha);
         MutableLiveData<Pair<List<Commit>, Throwable>> liveData = new MutableLiveData<>();
-        liveData.setValue(Pair.create(list, null));
-        when(viewModel.getCommitsLiveData()).thenReturn(liveData);
+        liveData.postValue(Pair.create(list, null));
+        when(mockViewModel.getCommitsLiveData()).thenReturn(liveData);
+        MutableLiveData<Boolean> fetchingLiveData = new MutableLiveData<>();
+        fetchingLiveData.postValue(false);
+        when(mockViewModel.getFetchingLiveData()).thenReturn(fetchingLiveData);
+        activityTestRule.getActivity().setFragment(listFragment);
 
-        onView(withText("sha")).check(matches(isDisplayed()));
+        onView(allOf(withText("sha"), withId(R.id.hash))).check(matches(isDisplayed()));
+
+    }
+
+    public static Matcher withSha(Matcher<Commit> nameMatcher) {
+        return new TypeSafeMatcher<Commit>() {
+            @Override
+            public void describeTo(Description description) {
+
+            }
+
+            @Override
+            public boolean matchesSafely(Commit commit) {
+                return nameMatcher.matches(commit.getSha());
+            }
+
+        };
     }
 }

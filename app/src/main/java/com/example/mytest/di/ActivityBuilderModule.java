@@ -7,7 +7,7 @@ import dagger.android.ContributesAndroidInjector;
 
 @Module
 public abstract class ActivityBuilderModule {
-    @ContributesAndroidInjector(modules = CommitListActivityModule.class)
+    @ContributesAndroidInjector(/*modules = CommitListActivityModule.class*/)
     abstract CommitListActivity contributeCommitListActivity();
 
 }

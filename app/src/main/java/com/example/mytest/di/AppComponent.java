@@ -1,6 +1,6 @@
 package com.example.mytest.di;
 
-import com.example.mytest.TestApp;
+import com.example.mytest.MyApp;
 
 import javax.inject.Singleton;
 
@@ -18,7 +18,8 @@ import dagger.android.support.AndroidSupportInjectionModule;
         AndroidSupportInjectionModule.class,
         AppModule.class,
         ActivityBuilderModule.class,
-        ViewModelModule.class
+        ViewModelModule.class,
+        FragmentBuilderModule.class
         })
 public interface AppComponent {
 
@@ -26,12 +27,12 @@ public interface AppComponent {
     interface Builder {
 
         @BindsInstance
-        Builder application(TestApp application);
+        Builder application(MyApp application);
 
         AppComponent build();
     }
 
-    void inject(TestApp application);
+    void inject(MyApp application);
 
 
 }

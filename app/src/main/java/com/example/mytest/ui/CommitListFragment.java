@@ -9,18 +9,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.mytest.R;
 import com.example.mytest.databinding.FragmentCommitListBinding;
+import com.example.mytest.di.Injectable;
 
 import javax.inject.Inject;
 
-import dagger.android.support.AndroidSupportInjection;
 import io.reactivex.disposables.CompositeDisposable;
 
-public class CommitListFragment extends Fragment {
-
+public class CommitListFragment extends Fragment implements Injectable {
     private CompositeDisposable compositeDisposable;
     private FragmentCommitListBinding binding;
     private CommitListAdaptor commitListAdaptor;
@@ -32,7 +33,6 @@ public class CommitListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         compositeDisposable = new CompositeDisposable();
-        AndroidSupportInjection.inject(this);
         super.onCreate(savedInstanceState);
     }
 
@@ -56,11 +56,13 @@ public class CommitListFragment extends Fragment {
 
     private void initViewModel() {
         viewModel = new ViewModelProvider(this, viewModelFactory).get(CommitListFragmentViewModel.class);
-        viewModel.getFetchingLiveData().observe(getViewLifecycleOwner(), fetching -> {
+        LifecycleOwner viewLifecycleOwner = getViewLifecycleOwner();
+        LiveData<Boolean> fetchingLiveData = viewModel.getFetchingLiveData();
+        fetchingLiveData.observe(viewLifecycleOwner, fetching -> {
             binding.container.setRefreshing(Boolean.TRUE == fetching);
         });
 
-        viewModel.getCommitsLiveData().observe(getViewLifecycleOwner(), pair -> {
+        viewModel.getCommitsLiveData().observe(viewLifecycleOwner, pair -> {
             if (pair != null) {
                 if (pair.second != null) {
                     Toast.makeText(getContext(), R.string.api_error, Toast.LENGTH_LONG).show();
