@@ -1,2 +1,2 @@
 # MyApp
-A demo app for Dagger2, ViewModel, Retrofit, unit test and Espresso test. Integrated with Github API to get data.
+A demo app using Dagger2, ViewModel, RxJava, Retrofit, unit test and Espresso test. Integrated with Github API to get data.
