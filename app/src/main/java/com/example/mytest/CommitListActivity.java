@@ -32,11 +32,19 @@ public class CommitListActivity extends AppCompatActivity {
 
         commitListAdaptor = new CommitListAdaptor(this);
         binding.commitList.setAdapter(commitListAdaptor);
-        compositeDisposable.add(dataRepo.getCommits("hma13", "TestApp", "develop").subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe((commits, throwable) -> {
+
+        binding.container.setOnRefreshListener(this::getCommits);
+        //TODO: move to viewmodel
+        getCommits();
+    }
+
+    private void getCommits() {
+        compositeDisposable.add(dataRepo.getCommits("hma13", "TestApp", "develop").doOnSubscribe(disposable -> binding.container.setRefreshing(true)).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe((commits, throwable) -> {
             if (throwable != null) {
                 Timber.e(throwable);
             }
             Timber.d("size: %d", commits.size());
+            binding.container.setRefreshing(false);
             commitListAdaptor.setCommits(commits);
             commitListAdaptor.notifyDataSetChanged();
         }));
