@@ -3,24 +3,25 @@ package com.example.mytest;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.mytest.databinding.ActivityCommitListBinding;
-import com.example.mytest.repo.DataRepo;
+import com.example.mytest.di.MyViewModelFactory;
 
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
-import timber.log.Timber;
 
 public class CommitListActivity extends AppCompatActivity {
-    @Inject
-    DataRepo dataRepo;
+
     private CompositeDisposable compositeDisposable;
     private ActivityCommitListBinding binding;
     private CommitListAdaptor commitListAdaptor;
+
+    @Inject
+    MyViewModelFactory viewModelFactory;
+    private CommitListActivityViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,26 +34,18 @@ public class CommitListActivity extends AppCompatActivity {
         commitListAdaptor = new CommitListAdaptor(this);
         binding.commitList.setAdapter(commitListAdaptor);
 
-        binding.container.setOnRefreshListener(this::getCommits);
-        //TODO: move to viewmodel
-        getCommits();
-    }
+        viewModel = new ViewModelProvider(this, viewModelFactory).get(CommitListActivityViewModel.class);
+        binding.container.setOnRefreshListener(() -> viewModel.fetchCommits());
 
-    private void getCommits() {
-        //passes null to branchName for 'master'
-        compositeDisposable.add(dataRepo.getCommits("hma13", "TestApp", null)
-                .doOnSubscribe(disposable -> binding.container.setRefreshing(true))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doAfterTerminate(() -> binding.container.setRefreshing(false))
-                .subscribe((commits, throwable) -> {
-                    if (throwable != null) {
-                        Timber.e(throwable);
-                    } else {
-                        Timber.d("size: %d", commits.size());
-                        commitListAdaptor.setCommits(commits);
-                    }
-                }));
+        viewModel.getFetchingLiveData().observe(this, fetching -> {
+            binding.container.setRefreshing(Boolean.TRUE == fetching);
+        });
+
+        viewModel.getCommitsLiveData().observe(this, commits -> {
+            commitListAdaptor.setCommits(commits);
+        });
+
+        viewModel.fetchCommits();
     }
 
 
