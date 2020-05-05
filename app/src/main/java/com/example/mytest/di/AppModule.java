@@ -8,7 +8,6 @@ import com.example.mytest.api.GithubApiClient;
 import com.example.mytest.api.RemoteRepo;
 import com.example.mytest.repo.DataRepo;
 
-import dagger.Lazy;
 import dagger.Module;
 import dagger.Provides;
 import dagger.Reusable;
@@ -30,8 +29,8 @@ abstract class AppModule {
 
     @Provides
     @Reusable
-    static DataRepo provideDataRepo(Lazy<GithubApiClient> clientLazy) {
-        return new RemoteRepo(clientLazy);
+    static DataRepo provideDataRepo(GithubApiClient client) {
+        return new RemoteRepo(client);
     }
 
 

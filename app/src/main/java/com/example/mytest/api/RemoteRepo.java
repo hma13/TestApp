@@ -1,24 +1,25 @@
 package com.example.mytest.api;
 
-import com.example.mytest.data.Commit;
+import com.example.mytest.data.CommitDetail;
 import com.example.mytest.repo.DataRepo;
 
+import java.util.Arrays;
 import java.util.List;
 
-import dagger.Lazy;
 import dagger.Reusable;
 import io.reactivex.Single;
+import timber.log.Timber;
 
 @Reusable
 public class RemoteRepo implements DataRepo {
-    private Lazy<GithubApiClient> clientLazy;
+    private GithubApiClient client;
 
-    public RemoteRepo(Lazy<GithubApiClient> clientLazy) {
-        this.clientLazy = clientLazy;
+    public RemoteRepo(GithubApiClient client) {
+        this.client = client;
     }
 
     @Override
-    public Single<List<Commit>> getCommits(String owner, String repo) {
-        return clientLazy.get().getGitHubApiService().getCommits(owner, repo).map(GetCommitsResponse::getCommits);
+    public Single<List<CommitDetail>> getCommits(String owner, String repo, String branchName) {
+        return client.getGitHubApiService().getCommits(owner, repo, branchName).doAfterSuccess(commitDetails -> Timber.d(Arrays.toString(commitDetails.toArray(new CommitDetail[0]))));
     }
 }

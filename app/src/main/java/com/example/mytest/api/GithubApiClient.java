@@ -1,7 +1,9 @@
 package com.example.mytest.api;
 
 import com.example.mytest.BuildConfig;
+import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -43,10 +45,14 @@ public class GithubApiClient {
 
         client = clientBuilder.build();
 
+        Gson gson = new GsonBuilder()
+                .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+                .create();
+
         Retrofit retroFit = new Retrofit.Builder()
                 .client(client)
                 .baseUrl(GITHUB_URL)
-                .addConverterFactory(GsonConverterFactory.create(new Gson()))
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
         gitHubApiService = retroFit.create(GithubApiService.class);

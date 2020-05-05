@@ -8,4 +8,15 @@ public class Commit {
     @SerializedName("commit")
     private CommitDetail commitDetail;
 
+    public String getSha() {
+        return sha;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public CommitDetail getCommitDetail() {
+        return commitDetail;
+    }
 }
