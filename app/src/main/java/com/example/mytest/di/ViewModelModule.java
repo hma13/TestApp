@@ -3,7 +3,7 @@ package com.example.mytest.di;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.mytest.CommitListActivityViewModel;
+import com.example.mytest.ui.CommitListFragmentViewModel;
 
 import dagger.Binds;
 import dagger.Module;
@@ -16,7 +16,7 @@ public abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(CommitListActivityViewModel.class)
-    abstract ViewModel bindCommitListActivityViewModel(CommitListActivityViewModel viewModel);
+    @ViewModelKey(CommitListFragmentViewModel.class)
+    abstract ViewModel bindCommitListActivityViewModel(CommitListFragmentViewModel viewModel);
 
 }

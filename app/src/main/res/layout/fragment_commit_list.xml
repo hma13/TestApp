@@ -6,15 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".ui.CommitListActivity">
 
-    <fragment
-        android:id="@+id/fragment"
-        class="com.example.mytest.ui.CommitListFragment"
+    <ListView
+        android:id="@+id/commit_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <!--    <ListView-->
-    <!--        android:id="@+id/commit_list"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content" />-->
+        android:layout_height="wrap_content" />
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

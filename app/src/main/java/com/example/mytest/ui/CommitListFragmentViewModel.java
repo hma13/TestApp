@@ -1,4 +1,4 @@
-package com.example.mytest;
+package com.example.mytest.ui;
 
 import androidx.core.util.Pair;
 import androidx.lifecycle.MutableLiveData;
@@ -16,7 +16,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
-public class CommitListActivityViewModel extends ViewModel {
+public class CommitListFragmentViewModel extends ViewModel {
     @Inject
     DataRepo dataRepo;
 
@@ -25,7 +25,7 @@ public class CommitListActivityViewModel extends ViewModel {
     private Disposable disposable;
 
     @Inject
-    public CommitListActivityViewModel(DataRepo dataRepo) {
+    public CommitListFragmentViewModel(DataRepo dataRepo) {
         this.dataRepo = dataRepo;
     }
 
