@@ -50,6 +50,13 @@ public class CommitListViewModelTest {
         list.add(new Commit());
         when(mockRepo.getCommits(anyString(), anyString(), nullable(String.class))).thenReturn(Single.just(list));
         viewModel.fetchCommits();
-        Assert.assertEquals(1, viewModel.getCommitsLiveData().getValue().size());
+        Assert.assertEquals(1, viewModel.getCommitsLiveData().getValue().first.size());
+    }
+
+    @Test
+    public void testException() {
+        when(mockRepo.getCommits(anyString(), anyString(), nullable(String.class))).thenReturn(Single.error(new RuntimeException("error")));
+        viewModel.fetchCommits();
+        Assert.assertNotNull(viewModel.getCommitsLiveData().getValue().second);
     }
 }

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">My Test</string>
+    <string name="api_error">API Error</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.example.mytest;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -41,8 +42,14 @@ public class CommitListActivity extends AppCompatActivity {
             binding.container.setRefreshing(Boolean.TRUE == fetching);
         });
 
-        viewModel.getCommitsLiveData().observe(this, commits -> {
-            commitListAdaptor.setCommits(commits);
+        viewModel.getCommitsLiveData().observe(this, pair -> {
+            if (pair != null) {
+                if (pair.second != null) {
+                    Toast.makeText(CommitListActivity.this, R.string.api_error, Toast.LENGTH_LONG).show();
+                } else {
+                    commitListAdaptor.setCommits(pair.first);
+                }
+            }
         });
 
         viewModel.fetchCommits();

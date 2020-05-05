@@ -1,5 +1,6 @@
 package com.example.mytest;
 
+import androidx.core.util.Pair;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -10,7 +11,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -21,7 +21,7 @@ public class CommitListActivityViewModel extends ViewModel {
     DataRepo dataRepo;
 
     private MutableLiveData<Boolean> fetchingLiveData = new MutableLiveData<>();
-    private MutableLiveData<List<Commit>> commitsLiveData = new MutableLiveData<>();
+    private MutableLiveData<Pair<List<Commit>, Throwable>> commitsLiveData = new MutableLiveData<>();
     private Disposable disposable;
 
     @Inject
@@ -31,8 +31,7 @@ public class CommitListActivityViewModel extends ViewModel {
 
     void fetchCommits() {
         //passes null to branchName for 'master' branch
-        Single<List<Commit>> single = dataRepo.getCommits("hma13", "TestApp", null);
-        disposable = single
+        disposable = dataRepo.getCommits("hma13", "TestApp", null)
                 .doOnSubscribe(disposable -> fetchingLiveData.postValue(true))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -40,9 +39,10 @@ public class CommitListActivityViewModel extends ViewModel {
                 .subscribe((commits, throwable) -> {
                     if (throwable != null) {
                         Timber.e(throwable);
+                        commitsLiveData.setValue(Pair.create(null, throwable));
                     } else {
                         Timber.d("size: %d", commits.size());
-                        commitsLiveData.setValue(commits);
+                        commitsLiveData.setValue(Pair.create(commits, null));
                     }
                 });
 
@@ -60,7 +60,7 @@ public class CommitListActivityViewModel extends ViewModel {
         return fetchingLiveData;
     }
 
-    MutableLiveData<List<Commit>> getCommitsLiveData() {
+    MutableLiveData<Pair<List<Commit>, Throwable>> getCommitsLiveData() {
         return commitsLiveData;
     }
 }
