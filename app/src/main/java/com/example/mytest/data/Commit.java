@@ -19,4 +19,13 @@ public class Commit {
     public CommitDetail getCommitDetail() {
         return commitDetail;
     }
+
+    @Override
+    public String toString() {
+        return "Commit{" +
+                "sha='" + sha + '\'' +
+                ", url='" + url + '\'' +
+                ", commitDetail=" + commitDetail +
+                '}';
+    }
 }

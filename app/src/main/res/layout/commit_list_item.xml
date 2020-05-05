@@ -9,18 +9,17 @@
     <TextView
         android:id="@+id/author"
         android:layout_width="0dp"
-        android:layout_height="30dp"
-        android:gravity="center_vertical"
+        android:layout_height="40dp"
         app:layout_constraintEnd_toStartOf="@id/hash"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.3"
         tools:text="author" />
 
     <TextView
         android:id="@+id/hash"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:gravity="center_vertical"
         app:layout_constraintBottom_toBottomOf="@id/author"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/author"

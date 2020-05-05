@@ -47,6 +47,7 @@ public class GithubApiClient {
 
         Gson gson = new GsonBuilder()
                 .setFieldNamingPolicy(FieldNamingPolicy.IDENTITY)
+                .registerTypeAdapter(Long.class, new CalendarTypeAdapter())
                 .create();
 
         Retrofit retroFit = new Retrofit.Builder()

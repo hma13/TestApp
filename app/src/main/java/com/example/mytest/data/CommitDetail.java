@@ -48,10 +48,19 @@ public class CommitDetail {
         return author != null ? author.getName() : null;
     }
 
+    @Override
+    public String toString() {
+        return "CommitDetail{" +
+                "author=" + author +
+                ", committer=" + committer +
+                ", message='" + message + '\'' +
+                '}';
+    }
+
     public static class PersonalInfo {
         private String name;
         private String email;
-        private String date;
+        private Long date;
 
         public String getName() {
             return name;
@@ -61,8 +70,17 @@ public class CommitDetail {
             return email;
         }
 
-        public String getDate() {
+        public Long getDate() {
             return date;
+        }
+
+        @Override
+        public String toString() {
+            return "PersonalInfo{" +
+                    "name='" + name + '\'' +
+                    ", email='" + email + '\'' +
+                    ", date=" + date +
+                    '}';
         }
     }
 }
