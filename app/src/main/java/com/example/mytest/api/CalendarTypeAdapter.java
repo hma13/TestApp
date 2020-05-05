@@ -26,7 +26,7 @@ import timber.log.Timber;
 
 class CalendarTypeAdapter implements JsonSerializer<Long>, JsonDeserializer<Long> {
 
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss'Z'", Locale.US);
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
 
     @Override
     public Long deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext ctx) {
