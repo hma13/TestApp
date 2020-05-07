@@ -7,21 +7,21 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.github.data.Commit;
-import com.example.github.data.CommitDetail;
+import com.example.github.data.CommitInfo;
+import com.example.github.data.CommitListItem;
 import com.example.github.databinding.CommitListItemBinding;
 
 import java.util.ArrayList;
 import java.util.List;
 
 class CommitListAdaptor extends RecyclerView.Adapter<CommitViewHolder> {
-    private final List<Commit> commits;
+    private final List<CommitListItem> commits;
 
     CommitListAdaptor(@NonNull Context context) {
         this.commits = new ArrayList<>();
     }
 
-    private Commit getItem(int position) {
+    private CommitListItem getItem(int position) {
         return commits.get(position);
     }
 
@@ -34,14 +34,14 @@ class CommitListAdaptor extends RecyclerView.Adapter<CommitViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull CommitViewHolder holder, int position) {
-        Commit commit = getItem(position);
+        CommitListItem commit = getItem(position);
         CommitListItemBinding binding = holder.binding;
         if (commit != null) {
             binding.hash.setText(commit.getSha());
-            CommitDetail commitDetail = commit.getCommitDetail();
-            if (commitDetail != null) {
-                binding.author.setText(commitDetail.getAuthorName());
-                binding.message.setText(commitDetail.getMessage());
+            CommitInfo commitInfo = commit.getCommitInfo();
+            if (commitInfo != null) {
+                binding.author.setText(commitInfo.getAuthorName());
+                binding.message.setText(commitInfo.getMessage());
             }
         } else {
             binding.hash.setText(null);
@@ -61,7 +61,7 @@ class CommitListAdaptor extends RecyclerView.Adapter<CommitViewHolder> {
         return commits.size();
     }
 
-    void resetCommits(List<Commit> commits) {
+    void resetCommits(List<CommitListItem> commits) {
         this.commits.clear();
         this.commits.addAll(commits);
         notifyDataSetChanged();

@@ -1,4 +1,4 @@
-package com.example.github.ui;
+package com.example.github.ui.commit;
 
 import androidx.core.util.Pair;
 import androidx.lifecycle.MutableLiveData;
@@ -7,9 +7,7 @@ import androidx.test.rule.ActivityTestRule;
 import com.example.github.R;
 import com.example.github.SingleFragmentActivity;
 import com.example.github.TaskExecutorWithIdlingResourceRule;
-import com.example.github.data.Commit;
-import com.example.github.ui.commit.CommitListFragment;
-import com.example.github.ui.commit.CommitListFragmentViewModel;
+import com.example.github.data.CommitListItem;
 import com.example.github.util.ViewModelUtil;
 
 import org.hamcrest.Description;
@@ -31,7 +29,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class CommitListFragmentTest {
+public class CommitListItemListFragmentTest {
     @Rule
     public ActivityTestRule<SingleFragmentActivity> activityTestRule =
             new ActivityTestRule<>(SingleFragmentActivity.class, true, true);
@@ -51,10 +49,10 @@ public class CommitListFragmentTest {
 
     @Test
     public void testSuccess() {
-        List<Commit> list = new ArrayList<>();
-        Commit sha = new Commit("sha");
+        List<CommitListItem> list = new ArrayList<>();
+        CommitListItem sha = new CommitListItem("sha");
         list.add(sha);
-        MutableLiveData<Pair<List<Commit>, Throwable>> liveData = new MutableLiveData<>();
+        MutableLiveData<Pair<List<CommitListItem>, Throwable>> liveData = new MutableLiveData<>();
         liveData.postValue(Pair.create(list, null));
         when(mockViewModel.getCommitsLiveData()).thenReturn(liveData);
         MutableLiveData<Boolean> fetchingLiveData = new MutableLiveData<>();
@@ -66,15 +64,15 @@ public class CommitListFragmentTest {
 
     }
 
-    public static Matcher withSha(Matcher<Commit> nameMatcher) {
-        return new TypeSafeMatcher<Commit>() {
+    public static Matcher withSha(Matcher<CommitListItem> nameMatcher) {
+        return new TypeSafeMatcher<CommitListItem>() {
             @Override
             public void describeTo(Description description) {
 
             }
 
             @Override
-            public boolean matchesSafely(Commit commit) {
+            public boolean matchesSafely(CommitListItem commit) {
                 return nameMatcher.matches(commit.getSha());
             }
 

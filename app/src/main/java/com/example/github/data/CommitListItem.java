@@ -2,16 +2,16 @@ package com.example.github.data;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Commit {
+public class CommitListItem {
     private String sha;
     private String url;
     @SerializedName("commit")
-    private CommitDetail commitDetail;
+    private CommitInfo commitInfo;
 
-    public Commit() {
+    public CommitListItem() {
     }
 
-    public Commit(String sha) {
+    public CommitListItem(String sha) {
         this.sha = sha;
     }
 
@@ -23,8 +23,8 @@ public class Commit {
         return url;
     }
 
-    public CommitDetail getCommitDetail() {
-        return commitDetail;
+    public CommitInfo getCommitInfo() {
+        return commitInfo;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class Commit {
         return "Commit{" +
                 "sha='" + sha + '\'' +
                 ", url='" + url + '\'' +
-                ", commitDetail=" + commitDetail +
+                ", commitInfo=" + commitInfo +
                 '}';
     }
 }

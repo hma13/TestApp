@@ -3,7 +3,7 @@ package com.example.github.ui;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
 import com.example.github.RxImmediateSchedulerRule;
-import com.example.github.data.Commit;
+import com.example.github.data.CommitListItem;
 import com.example.github.repo.DataRepo;
 import com.example.github.ui.commit.CommitListFragmentViewModel;
 
@@ -23,7 +23,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.when;
 
-public class CommitListFragmentViewModelTest {
+public class CommitListItemListFragmentViewModelTest {
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
@@ -48,8 +48,8 @@ public class CommitListFragmentViewModelTest {
 
     @Test
     public void testSuccess() {
-        ArrayList<Commit> list = new ArrayList<>();
-        list.add(new Commit());
+        ArrayList<CommitListItem> list = new ArrayList<>();
+        list.add(new CommitListItem());
         when(mockRepo.getCommits(anyString(), anyString(), nullable(String.class))).thenReturn(Single.just(list));
         viewModel.fetchCommits();
         Assert.assertEquals(1, viewModel.getCommitsLiveData().getValue().first.size());

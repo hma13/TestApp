@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.github.data.Commit;
+import com.example.github.data.CommitListItem;
 import com.example.github.repo.DataRepo;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class CommitDetailFragmentViewModel extends ViewModel {
     DataRepo dataRepo;
 
     private MutableLiveData<Boolean> fetchingLiveData = new MutableLiveData<>();
-    private MutableLiveData<Pair<List<Commit>, Throwable>> commitLiveData = new MutableLiveData<>();
+    private MutableLiveData<Pair<List<CommitListItem>, Throwable>> commitLiveData = new MutableLiveData<>();
     private Disposable disposable;
 
     @Inject
@@ -61,7 +61,7 @@ public class CommitDetailFragmentViewModel extends ViewModel {
         return fetchingLiveData;
     }
 
-    LiveData<Pair<List<Commit>, Throwable>> getCommitLiveData() {
+    LiveData<Pair<List<CommitListItem>, Throwable>> getCommitLiveData() {
         return commitLiveData;
     }
 }
