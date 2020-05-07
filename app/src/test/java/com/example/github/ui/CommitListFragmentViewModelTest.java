@@ -5,6 +5,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import com.example.github.RxImmediateSchedulerRule;
 import com.example.github.data.Commit;
 import com.example.github.repo.DataRepo;
+import com.example.github.ui.commit.CommitListFragmentViewModel;
 
 import org.junit.After;
 import org.junit.Assert;

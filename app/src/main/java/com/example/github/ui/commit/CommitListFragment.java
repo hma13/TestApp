@@ -1,4 +1,4 @@
-package com.example.github.ui;
+package com.example.github.ui.commit;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.github.R;
@@ -48,8 +49,11 @@ public class CommitListFragment extends Fragment implements Injectable {
         commitListAdaptor = new CommitListAdaptor(context);
         commitListAdaptor.setHasStableIds(true);
         binding.commitList.setHasFixedSize(true);
-        binding.commitList.setLayoutManager(new LinearLayoutManager(context));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        binding.commitList.setLayoutManager(layoutManager);
         binding.commitList.setAdapter(commitListAdaptor);
+        DividerItemDecoration decor = new DividerItemDecoration(context, layoutManager.getOrientation());
+        binding.commitList.addItemDecoration(decor);
 
         binding.container.setOnRefreshListener(() -> viewModel.fetchCommits());
 

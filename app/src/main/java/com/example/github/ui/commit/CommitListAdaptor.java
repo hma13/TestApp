@@ -1,4 +1,4 @@
-package com.example.github.ui;
+package com.example.github.ui.commit;
 
 import android.content.Context;
 import android.view.LayoutInflater;

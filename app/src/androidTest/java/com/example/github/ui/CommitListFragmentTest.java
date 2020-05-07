@@ -8,6 +8,8 @@ import com.example.github.R;
 import com.example.github.SingleFragmentActivity;
 import com.example.github.TaskExecutorWithIdlingResourceRule;
 import com.example.github.data.Commit;
+import com.example.github.ui.commit.CommitListFragment;
+import com.example.github.ui.commit.CommitListFragmentViewModel;
 import com.example.github.util.ViewModelUtil;
 
 import org.hamcrest.Description;

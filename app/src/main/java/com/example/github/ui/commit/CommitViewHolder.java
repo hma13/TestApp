@@ -1,4 +1,4 @@
-package com.example.github.ui;
+package com.example.github.ui.commit;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
