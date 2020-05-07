@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.CommitListActivity">
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/commit_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

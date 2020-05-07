@@ -1,5 +1,6 @@
 package com.example.github.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,10 +13,13 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.github.R;
 import com.example.github.databinding.FragmentCommitListBinding;
 import com.example.github.di.Injectable;
+
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -40,8 +44,13 @@ public class CommitListFragment extends Fragment implements Injectable {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentCommitListBinding.inflate(getLayoutInflater());
-        commitListAdaptor = new CommitListAdaptor(getContext());
+        Context context = Objects.requireNonNull(getContext());
+        commitListAdaptor = new CommitListAdaptor(context);
+        commitListAdaptor.setHasStableIds(true);
+        binding.commitList.setHasFixedSize(true);
+        binding.commitList.setLayoutManager(new LinearLayoutManager(context));
         binding.commitList.setAdapter(commitListAdaptor);
+
         binding.container.setOnRefreshListener(() -> viewModel.fetchCommits());
 
         return binding.getRoot();
@@ -67,7 +76,7 @@ public class CommitListFragment extends Fragment implements Injectable {
                 if (pair.second != null) {
                     Toast.makeText(getContext(), R.string.api_error, Toast.LENGTH_LONG).show();
                 } else {
-                    commitListAdaptor.setCommits(pair.first);
+                    commitListAdaptor.resetCommits(pair.first);
                 }
             }
         });
