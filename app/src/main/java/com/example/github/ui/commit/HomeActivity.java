@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.github.databinding.ActivityCommitListBinding;
+import com.example.github.databinding.ActivityHomeBinding;
 
 import javax.inject.Inject;
 
@@ -12,9 +12,7 @@ import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasAndroidInjector;
 
-public class CommitListActivity extends AppCompatActivity implements HasAndroidInjector {
-
-    private ActivityCommitListBinding binding;
+public class HomeActivity extends AppCompatActivity implements HasAndroidInjector {
 
     @Inject
     DispatchingAndroidInjector<Object> dispatchingAndroidInjector;
@@ -22,7 +20,7 @@ public class CommitListActivity extends AppCompatActivity implements HasAndroidI
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityCommitListBinding.inflate(getLayoutInflater());
+        com.example.github.databinding.ActivityHomeBinding binding = ActivityHomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
     }
 

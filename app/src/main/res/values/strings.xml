@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">My Github App</string>
     <string name="api_error">API Error</string>
+    <string name="commit_list">Commit List</string>
+    <string name="commit_detail">Commit Detail</string>
 </resources>
