@@ -1,11 +1,10 @@
-package com.example.github.ui;
+package com.example.github.ui.commit;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
-import com.example.github.RxImmediateSchedulerRule;
 import com.example.github.data.CommitListItem;
-import com.example.github.repo.DataRepo;
-import com.example.github.ui.commit.CommitListFragmentViewModel;
+import com.example.github.repository.CommitRepository;
+import com.example.github.util.RxImmediateSchedulerRule;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -30,9 +29,8 @@ public class CommitListItemListFragmentViewModelTest {
     @Rule
     public RxImmediateSchedulerRule rxImmediateSchedulerRule = new RxImmediateSchedulerRule();
 
-
     @Mock
-    DataRepo mockRepo;
+    CommitRepository mockRepo;
 
     private CommitListFragmentViewModel viewModel;
 

@@ -1,4 +1,4 @@
-package com.example.github;
+package com.example.github.util;
 
 import androidx.annotation.NonNull;
 

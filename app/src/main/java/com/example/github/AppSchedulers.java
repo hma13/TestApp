@@ -15,14 +15,18 @@ import io.reactivex.schedulers.Schedulers;
 public class AppSchedulers {
     private static final int THREAD_COUNT = 3;
     private final Scheduler single;
-    private final Scheduler io;
+    private final Scheduler network;
     private final Scheduler main;
 
     @Inject
     AppSchedulers() {
-        single = Schedulers.single();
-        io = Schedulers.from(Executors.newFixedThreadPool(THREAD_COUNT));
-        main = AndroidSchedulers.mainThread();
+        this(Schedulers.single(), Schedulers.from(Executors.newFixedThreadPool(THREAD_COUNT)), AndroidSchedulers.mainThread());
+    }
+
+    protected AppSchedulers(Scheduler single, Scheduler network, Scheduler main) {
+        this.single = single;
+        this.network = network;
+        this.main = main;
     }
 
     @NonNull
@@ -31,8 +35,8 @@ public class AppSchedulers {
     }
 
     @NonNull
-    public Scheduler io() {
-        return io;
+    public Scheduler network() {
+        return network;
     }
 
     @NonNull

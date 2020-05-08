@@ -4,10 +4,7 @@ import android.content.res.Resources;
 
 import com.example.github.BuildConfig;
 import com.example.github.MyApp;
-import com.example.github.api.RemoteRepo;
-import com.example.github.repo.DataRepo;
 
-import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import dagger.Reusable;
@@ -26,8 +23,5 @@ abstract class AppModule {
     static Timber.Tree providerTree() {
         return BuildConfig.DEBUG ? new Timber.DebugTree() : null;
     }
-
-    @Binds
-    public abstract DataRepo bindDataRepo(RemoteRepo remoteRepo);
 
 }
