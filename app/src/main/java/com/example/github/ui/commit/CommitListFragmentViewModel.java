@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.github.AppSchedulers;
 import com.example.github.data.CommitListItem;
 import com.example.github.repo.DataRepo;
 
@@ -12,14 +13,14 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class CommitListFragmentViewModel extends ViewModel {
     @Inject
     DataRepo dataRepo;
+    @Inject
+    AppSchedulers appSchedulers;
 
     private MutableLiveData<Boolean> fetchingLiveData = new MutableLiveData<>();
     private MutableLiveData<Pair<List<CommitListItem>, Throwable>> commitsLiveData = new MutableLiveData<>();
@@ -34,8 +35,8 @@ public class CommitListFragmentViewModel extends ViewModel {
         //passes null to branchName for 'master' branch
         disposable = dataRepo.getCommits("hma13", "TestApp", null)
                 .doOnSubscribe(disposable -> fetchingLiveData.postValue(true))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(appSchedulers.io())
+                .observeOn(appSchedulers.main())
                 .doAfterTerminate(() -> fetchingLiveData.setValue(false))
                 .subscribe((commits, throwable) -> {
                     if (throwable != null) {

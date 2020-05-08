@@ -1,6 +1,6 @@
 package com.example.github.di;
 
-import com.example.github.ui.commit.HomeActivity;
+import com.example.github.ui.HomeActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;

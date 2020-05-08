@@ -1,4 +1,4 @@
-package com.example.github.ui.commit;
+package com.example.github.ui;
 
 import android.os.Bundle;
 
