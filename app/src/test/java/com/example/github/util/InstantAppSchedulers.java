@@ -11,7 +11,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.internal.schedulers.ExecutorScheduler;
 
 public class InstantAppSchedulers extends AppSchedulers {
-    private Scheduler immediate = new Scheduler() {
+    private static final Scheduler IMMEDIATE = new Scheduler() {
         @Override
         public Disposable scheduleDirect(@NonNull Runnable run, long delay, @NonNull TimeUnit unit) {
             // this prevents StackOverflowErrors when scheduling with a delay
@@ -24,7 +24,7 @@ public class InstantAppSchedulers extends AppSchedulers {
         }
     };
 
-    public InstantAppSchedulers(Scheduler immediate) {
-        super(immediate, immediate, immediate);
+    public InstantAppSchedulers() {
+        super(IMMEDIATE, IMMEDIATE, IMMEDIATE);
     }
 }

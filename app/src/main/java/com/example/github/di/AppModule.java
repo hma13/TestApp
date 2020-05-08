@@ -1,9 +1,10 @@
 package com.example.github.di;
 
-import android.content.res.Resources;
-
 import com.example.github.BuildConfig;
-import com.example.github.MyApp;
+import com.example.github.api.GithubApiClient;
+import com.example.github.api.GithubApiService;
+
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -14,8 +15,9 @@ import timber.log.Timber;
 abstract class AppModule {
 
     @Provides
-    static Resources provideResources(MyApp application) {
-        return application.getResources();
+    @Singleton
+    static GithubApiService provideGitHubService(GithubApiClient client) {
+        return client.getGitHubApiService();
     }
 
     @Provides
