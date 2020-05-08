@@ -1,6 +1,5 @@
 package com.example.github.ui.commit;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,14 +12,14 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.github.R;
 import com.example.github.databinding.FragmentCommitDetailBinding;
 import com.example.github.di.Injectable;
-
-import java.util.Objects;
 
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
+import timber.log.Timber;
 
 public class CommitDetailFragment extends Fragment implements Injectable {
     private CompositeDisposable compositeDisposable;
@@ -29,18 +28,22 @@ public class CommitDetailFragment extends Fragment implements Injectable {
 
     @Inject
     ViewModelProvider.Factory viewModelFactory;
+    private String commitHash;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         compositeDisposable = new CompositeDisposable();
         super.onCreate(savedInstanceState);
+        Bundle bundle = requireArguments();
+        commitHash = CommitDetailFragmentArgs.fromBundle(bundle).getCommitHash();
+        Timber.d("commit hash: %s", commitHash);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentCommitDetailBinding.inflate(getLayoutInflater());
-        Context context = Objects.requireNonNull(getContext());
+        requireActivity().setTitle(R.string.commit_detail);
 
         return binding.getRoot();
     }
@@ -48,8 +51,9 @@ public class CommitDetailFragment extends Fragment implements Injectable {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         initViewModel();
-        viewModel.fetchCommit();
+        viewModel.fetchCommit(commitHash);
     }
 
     private void initViewModel() {

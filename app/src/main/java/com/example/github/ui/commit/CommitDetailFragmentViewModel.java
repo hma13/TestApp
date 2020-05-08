@@ -5,10 +5,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.github.data.CommitListItem;
+import com.example.github.data.CommitDetail;
 import com.example.github.repo.DataRepo;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -22,7 +20,7 @@ public class CommitDetailFragmentViewModel extends ViewModel {
     DataRepo dataRepo;
 
     private MutableLiveData<Boolean> fetchingLiveData = new MutableLiveData<>();
-    private MutableLiveData<Pair<List<CommitListItem>, Throwable>> commitLiveData = new MutableLiveData<>();
+    private MutableLiveData<Pair<CommitDetail, Throwable>> commitLiveData = new MutableLiveData<>();
     private Disposable disposable;
 
     @Inject
@@ -30,20 +28,19 @@ public class CommitDetailFragmentViewModel extends ViewModel {
         this.dataRepo = dataRepo;
     }
 
-    void fetchCommit() {
+    void fetchCommit(String hash) {
         //passes null to branchName for 'master' branch
-        disposable = dataRepo.getCommits("hma13", "TestApp", null)
+        disposable = dataRepo.getCommit("hma13", "TestApp", hash)
                 .doOnSubscribe(disposable -> fetchingLiveData.postValue(true))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doAfterTerminate(() -> fetchingLiveData.setValue(false))
-                .subscribe((commits, throwable) -> {
+                .subscribe((commit, throwable) -> {
                     if (throwable != null) {
                         Timber.e(throwable);
                         commitLiveData.setValue(Pair.create(null, throwable));
                     } else {
-                        Timber.d("size: %d", commits.size());
-                        commitLiveData.setValue(Pair.create(commits, null));
+                        commitLiveData.setValue(Pair.create(commit, null));
                     }
                 });
 
@@ -61,7 +58,7 @@ public class CommitDetailFragmentViewModel extends ViewModel {
         return fetchingLiveData;
     }
 
-    LiveData<Pair<List<CommitListItem>, Throwable>> getCommitLiveData() {
+    LiveData<Pair<CommitDetail, Throwable>> getCommitLiveData() {
         return commitLiveData;
     }
 }

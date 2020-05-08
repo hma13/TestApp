@@ -20,5 +20,5 @@ public interface GithubApiService {
     Single<List<CommitListItem>> getCommits(@Path("owner") String owner, @Path("repo") String repo, @Query("sha") String branchName);
 
     @GET("/repos/{owner}/{repo}/commits/{commitHash}")
-    Single<CommitDetail> getCommit(@Path("owner") String owner, @Path("repo") String repo, @Query("commitHash") String commitHash);
+    Single<CommitDetail> getCommit(@Path("owner") String owner, @Path("repo") String repo, @Path("commitHash") String commitHash);
 }

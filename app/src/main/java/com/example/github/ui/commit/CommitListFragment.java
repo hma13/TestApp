@@ -1,6 +1,5 @@
 package com.example.github.ui.commit;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,17 +9,17 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.github.R;
 import com.example.github.databinding.FragmentCommitListBinding;
 import com.example.github.di.Injectable;
-
-import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -45,14 +44,18 @@ public class CommitListFragment extends Fragment implements Injectable {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentCommitListBinding.inflate(getLayoutInflater());
-        Context context = Objects.requireNonNull(getContext());
-        commitListAdaptor = new CommitListAdaptor(context);
+        FragmentActivity activity = requireActivity();
+        activity.setTitle(R.string.commit_list);
+        commitListAdaptor = new CommitListAdaptor(item -> {
+            CommitListFragmentDirections.ActionCommitListFragmentToCommitDetailFragment action = CommitListFragmentDirections.actionCommitListFragmentToCommitDetailFragment(item.getSha());
+            Navigation.findNavController(binding.getRoot()).navigate(action);
+        });
         commitListAdaptor.setHasStableIds(true);
         binding.commitList.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(activity);
         binding.commitList.setLayoutManager(layoutManager);
         binding.commitList.setAdapter(commitListAdaptor);
-        DividerItemDecoration decor = new DividerItemDecoration(context, layoutManager.getOrientation());
+        DividerItemDecoration decor = new DividerItemDecoration(activity, layoutManager.getOrientation());
         binding.commitList.addItemDecoration(decor);
 
         binding.container.setOnRefreshListener(() -> viewModel.fetchCommits());
