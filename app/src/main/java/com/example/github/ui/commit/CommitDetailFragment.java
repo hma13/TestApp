@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
@@ -16,18 +18,19 @@ import com.example.github.R;
 import com.example.github.databinding.FragmentCommitDetailBinding;
 import com.example.github.di.Injectable;
 
+import java.util.Objects;
+
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 public class CommitDetailFragment extends Fragment implements Injectable {
+    @Inject
+    ViewModelProvider.Factory viewModelFactory;
     private CompositeDisposable compositeDisposable;
     private FragmentCommitDetailBinding binding;
     private CommitDetailFragmentViewModel viewModel;
-
-    @Inject
-    ViewModelProvider.Factory viewModelFactory;
     private String commitHash;
 
     @Override
@@ -43,8 +46,11 @@ public class CommitDetailFragment extends Fragment implements Injectable {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentCommitDetailBinding.inflate(getLayoutInflater());
-        requireActivity().setTitle(R.string.commit_detail);
-
+        AppCompatActivity activity = (AppCompatActivity) requireActivity();
+        activity.setTitle(R.string.commit_detail);
+        ActionBar actionBar = Objects.requireNonNull(activity.getSupportActionBar());
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
         return binding.getRoot();
     }
 

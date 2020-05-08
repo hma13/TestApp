@@ -26,12 +26,11 @@ import javax.inject.Inject;
 import io.reactivex.disposables.CompositeDisposable;
 
 public class CommitListFragment extends Fragment implements Injectable {
+    @Inject
+    ViewModelProvider.Factory viewModelFactory;
     private CompositeDisposable compositeDisposable;
     private FragmentCommitListBinding binding;
     private CommitListAdaptor commitListAdaptor;
-
-    @Inject
-    ViewModelProvider.Factory viewModelFactory;
     private CommitListFragmentViewModel viewModel;
 
     @Override
