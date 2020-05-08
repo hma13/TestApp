@@ -1,13 +1,13 @@
 package com.example.github.ui.commit;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.core.util.Pair;
+import androidx.lifecycle.Observer;
 
 import com.example.github.data.CommitListItem;
 import com.example.github.repository.CommitRepository;
-import com.example.github.util.RxImmediateSchedulerRule;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,22 +15,24 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.Single;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.nullable;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class CommitListItemListFragmentViewModelTest {
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
-    @Rule
-    public RxImmediateSchedulerRule rxImmediateSchedulerRule = new RxImmediateSchedulerRule();
+    @Mock
+    private CommitRepository mockRepo;
 
     @Mock
-    CommitRepository mockRepo;
+    private Observer<Pair<List<CommitListItem>, Throwable>> mockObserver;
 
     private CommitListFragmentViewModel viewModel;
 
@@ -38,6 +40,7 @@ public class CommitListItemListFragmentViewModelTest {
     public void setup() {
         MockitoAnnotations.initMocks(this);
         viewModel = new CommitListFragmentViewModel(mockRepo);
+        viewModel.getCommitsLiveData().observeForever(mockObserver);
     }
 
     @After
@@ -50,13 +53,14 @@ public class CommitListItemListFragmentViewModelTest {
         list.add(new CommitListItem());
         when(mockRepo.getCommits(anyString(), anyString(), nullable(String.class))).thenReturn(Single.just(list));
         viewModel.fetchCommits();
-        Assert.assertEquals(1, viewModel.getCommitsLiveData().getValue().first.size());
+        verify(mockObserver).onChanged(Pair.create(list, null));
     }
 
     @Test
     public void testException() {
-        when(mockRepo.getCommits(anyString(), anyString(), nullable(String.class))).thenReturn(Single.error(new RuntimeException("error")));
+        RuntimeException error = new RuntimeException("error");
+        when(mockRepo.getCommits(anyString(), anyString(), nullable(String.class))).thenReturn(Single.error(error));
         viewModel.fetchCommits();
-        Assert.assertNotNull(viewModel.getCommitsLiveData().getValue().second);
+        verify(mockObserver).onChanged(Pair.create(null, error));
     }
 }
