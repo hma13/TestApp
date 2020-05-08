@@ -22,7 +22,7 @@ public class GithubApiClient {
     private GithubApiService gitHubApiService;
 
     @Inject
-    public GithubApiClient() {
+    GithubApiClient() {
         init();
     }
 

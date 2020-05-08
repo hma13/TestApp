@@ -31,8 +31,8 @@ public class CommitRepositoryTest {
 
     @Test
     public void testGetCommits() {
-        when(apiService.getCommits(anyString(), anyString(), nullable(String.class))).thenReturn(Single.just(new ArrayList()));
-        commitRepository.getCommits("over", "test", null);
-        verify(apiService).getCommits("over", "test", null);
+        when(apiService.getCommits(anyString(), anyString(), nullable(String.class))).thenReturn(Single.just(new ArrayList<>()));
+        commitRepository.getCommits("owner", "test", null);
+        verify(apiService).getCommits("owner", "test", null);
     }
 }
