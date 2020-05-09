@@ -28,7 +28,7 @@ import static org.hamcrest.Matchers.allOf;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class CommitListItemListFragmentTest {
+public class CommitListFragmentTest {
     @Rule
     public TaskExecutorWithIdlingResourceRule executorRule = new TaskExecutorWithIdlingResourceRule();
 

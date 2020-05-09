@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Single;
+import retrofit2.Response;
 
 @Singleton
 public class CommitRepository {
@@ -23,11 +24,11 @@ public class CommitRepository {
         this.schedulers = schedulers;
     }
 
-    public Single<List<CommitListItem>> getCommits(String owner, String repo, String branchName) {
+    public Single<Response<List<CommitListItem>>> getCommits(String owner, String repo, String branchName) {
         return githubApiService.getCommits(owner, repo, branchName).subscribeOn(schedulers.network()).observeOn(schedulers.main());
     }
 
-    public Single<CommitDetail> getCommit(String owner, String repo, String commitHash) {
+    public Single<Response<CommitDetail>> getCommit(String owner, String repo, String commitHash) {
         return githubApiService.getCommit(owner, repo, commitHash).subscribeOn(schedulers.network()).observeOn(schedulers.main());
     }
 }

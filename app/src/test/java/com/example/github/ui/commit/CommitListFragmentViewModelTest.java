@@ -18,13 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Single;
+import retrofit2.Response;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class CommitListItemListFragmentViewModelTest {
+public class CommitListFragmentViewModelTest {
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
@@ -51,7 +52,7 @@ public class CommitListItemListFragmentViewModelTest {
     public void testSuccess() {
         ArrayList<CommitListItem> list = new ArrayList<>();
         list.add(new CommitListItem());
-        when(mockRepo.getCommits(anyString(), anyString(), nullable(String.class))).thenReturn(Single.just(list));
+        when(mockRepo.getCommits(anyString(), anyString(), nullable(String.class))).thenReturn(Single.just(Response.success(list)));
         viewModel.fetchCommits();
         verify(mockObserver).onChanged(Pair.create(list, null));
     }

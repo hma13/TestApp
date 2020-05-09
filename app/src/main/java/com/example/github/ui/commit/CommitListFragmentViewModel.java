@@ -31,13 +31,15 @@ public class CommitListFragmentViewModel extends ViewModel {
         disposable = commitRepository.getCommits("hma13", "TestApp", null)
                 .doOnSubscribe(disposable -> fetchingLiveData.postValue(true))
                 .doAfterTerminate(() -> fetchingLiveData.setValue(false))
-                .subscribe((commits, throwable) -> {
+                .subscribe((response, throwable) -> {
                     if (throwable != null) {
                         Timber.e(throwable);
                         commitsLiveData.setValue(Pair.create(null, throwable));
                     } else {
-                        Timber.d("size: %d", commits.size());
-                        commitsLiveData.setValue(Pair.create(commits, null));
+                        if (response.isSuccessful()) {
+                            Timber.d("size: %d", response.body().size());
+                            commitsLiveData.setValue(Pair.create(response.body(), null));
+                        }
                     }
                 });
 

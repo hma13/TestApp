@@ -29,12 +29,14 @@ public class CommitDetailFragmentViewModel extends ViewModel {
         disposable = commitRepository.getCommit("hma13", "TestApp", hash)
                 .doOnSubscribe(disposable -> fetchingLiveData.postValue(true))
                 .doAfterTerminate(() -> fetchingLiveData.setValue(false))
-                .subscribe((commit, throwable) -> {
+                .subscribe((response, throwable) -> {
                     if (throwable != null) {
                         Timber.e(throwable);
                         commitLiveData.setValue(Pair.create(null, throwable));
                     } else {
-                        commitLiveData.setValue(Pair.create(commit, null));
+                        if (response.isSuccessful()) {
+                            commitLiveData.setValue(Pair.create(response.body(), null));
+                        }
                     }
                 });
 
