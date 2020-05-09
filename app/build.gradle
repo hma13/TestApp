@@ -69,8 +69,6 @@ dependencies {
     annotationProcessor 'com.google.dagger:dagger-compiler:2.27'
     annotationProcessor 'com.google.dagger:dagger-android-processor:2.27'
     annotationProcessor 'com.google.dagger:dagger-android-support:2.27'
-//    androidTestAnnotationProcessor 'com.google.dagger:dagger-compiler:2.27'
-//    androidTestAnnotationProcessor 'com.google.dagger:dagger-android-processor:2.27'
 
     //retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
