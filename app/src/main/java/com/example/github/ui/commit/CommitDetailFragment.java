@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.github.R;
 import com.example.github.databinding.FragmentCommitDetailBinding;
@@ -32,6 +33,8 @@ public class CommitDetailFragment extends Fragment implements Injectable {
     private FragmentCommitDetailBinding binding;
     private CommitDetailFragmentViewModel viewModel;
     private String commitHash;
+    private CommitDetailAdaptor commitDetailAdaptor;
+    private LinearLayoutManager layout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,14 @@ public class CommitDetailFragment extends Fragment implements Injectable {
         ActionBar actionBar = Objects.requireNonNull(activity.getSupportActionBar());
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
+
+        commitDetailAdaptor = new CommitDetailAdaptor();
+        binding.commitList.setAdapter(commitDetailAdaptor);
+        binding.commitList.setHasFixedSize(true);
+        layout = new LinearLayoutManager(activity);
+        binding.commitList.setLayoutManager(layout);
+
+        binding.container.setOnRefreshListener(() -> viewModel.fetchCommit(commitHash));
         return binding.getRoot();
     }
 
@@ -72,7 +83,9 @@ public class CommitDetailFragment extends Fragment implements Injectable {
 
         viewModel.getCommitLiveData().observe(viewLifecycleOwner, pair -> {
             if (pair != null) {
-
+                if (pair.first != null) {
+                    commitDetailAdaptor.resetCommits(CommitDetailListItem.build(pair.first));
+                }
             }
         });
     }

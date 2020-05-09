@@ -13,6 +13,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.disposables.Disposable;
+import okhttp3.ResponseBody;
 import timber.log.Timber;
 
 public class CommitListFragmentViewModel extends ViewModel {
@@ -22,7 +23,7 @@ public class CommitListFragmentViewModel extends ViewModel {
     private Disposable disposable;
 
     @Inject
-    public CommitListFragmentViewModel(CommitRepository commitRepository) {
+    CommitListFragmentViewModel(CommitRepository commitRepository) {
         this.commitRepository = commitRepository;
     }
 
@@ -36,9 +37,12 @@ public class CommitListFragmentViewModel extends ViewModel {
                         Timber.e(throwable);
                         commitsLiveData.setValue(Pair.create(null, throwable));
                     } else {
-                        if (response.isSuccessful()) {
+                        if (response.isSuccessful() && response.body() != null) {
                             Timber.d("size: %d", response.body().size());
                             commitsLiveData.setValue(Pair.create(response.body(), null));
+                        } else {
+                            ResponseBody errorBody = response.errorBody();
+                            Timber.e(errorBody != null ? errorBody.string() : "Error response");
                         }
                     }
                 });
