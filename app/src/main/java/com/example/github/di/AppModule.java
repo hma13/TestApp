@@ -1,8 +1,13 @@
 package com.example.github.di;
 
+import android.app.Application;
+
+import androidx.room.Room;
+
 import com.example.github.BuildConfig;
 import com.example.github.api.GithubApiClient;
 import com.example.github.api.GithubApiService;
+import com.example.github.db.AppDb;
 
 import javax.inject.Singleton;
 
@@ -24,6 +29,12 @@ abstract class AppModule {
     @Reusable
     static Timber.Tree providerTree() {
         return BuildConfig.DEBUG ? new Timber.DebugTree() : null;
+    }
+
+    @Singleton
+    @Provides
+    static AppDb provideDb(Application app) {
+        return Room.databaseBuilder(app, AppDb.class, "app.db").build();
     }
 
 }

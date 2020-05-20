@@ -25,6 +25,12 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner 'com.example.github.MockTestRunner'
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
 
     buildTypes {
@@ -84,4 +90,12 @@ dependencies {
     implementation('com.squareup.retrofit2:adapter-rxjava2:2.3.0') {
         exclude module: 'rxjava'
     }
+
+    //room
+    implementation 'androidx.room:room-runtime:2.2.5'
+    annotationProcessor 'androidx.room:room-compiler:2.2.5' // For Kotlin use kapt instead of annotationProcessor
+
+    // optional - RxJava support for Room
+    implementation 'androidx.room:room-rxjava2:2.2.5'
+    testImplementation 'androidx.room:room-testing:2.2.5'
 }
