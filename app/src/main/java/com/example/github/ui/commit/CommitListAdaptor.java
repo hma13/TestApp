@@ -8,14 +8,14 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.github.R;
-import com.example.github.data.CommitListItem;
 import com.example.github.databinding.CommitListItemBinding;
+import com.example.github.db.CommitListItemEntity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CommitListAdaptor extends RecyclerView.Adapter<CommitViewHolder> {
-    private final List<CommitListItem> commits;
+    private final List<CommitListItemEntity> commits;
     private final OnCommitListItemClickListener listItemClickListener;
 
     CommitListAdaptor(OnCommitListItemClickListener listItemClickListener) {
@@ -23,7 +23,7 @@ public class CommitListAdaptor extends RecyclerView.Adapter<CommitViewHolder> {
         this.commits = new ArrayList<>();
     }
 
-    private CommitListItem getItem(int position) {
+    private CommitListItemEntity getItem(int position) {
         return commits.get(position);
     }
 
@@ -36,7 +36,7 @@ public class CommitListAdaptor extends RecyclerView.Adapter<CommitViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull CommitViewHolder holder, int position) {
-        CommitListItem commit = getItem(position);
+        CommitListItemEntity commit = getItem(position);
         CommitListItemBinding binding = holder.binding;
         binding.setCommit(commit);
         binding.setListener(listItemClickListener);
@@ -53,13 +53,13 @@ public class CommitListAdaptor extends RecyclerView.Adapter<CommitViewHolder> {
         return commits.size();
     }
 
-    void resetCommits(List<CommitListItem> commits) {
+    void resetCommits(List<CommitListItemEntity> commits) {
         this.commits.clear();
         this.commits.addAll(commits);
         notifyDataSetChanged();
     }
 
     public interface OnCommitListItemClickListener {
-        void onItemClick(CommitListItem item);
+        void onItemClick(CommitListItemEntity item);
     }
 }

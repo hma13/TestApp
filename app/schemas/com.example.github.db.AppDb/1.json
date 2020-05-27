@@ -2,10 +2,10 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "a250fe6c073b58ef58b9039d0b949a44",
+    "identityHash": "ac91398c60ac4f5feae85921f29c555c",
     "entities": [
       {
-        "tableName": "CommitListItemEntity",
+        "tableName": "commit_list_item",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`sha` TEXT NOT NULL, `url` TEXT, `authorName` TEXT, `authorEmail` TEXT, `authorDate` INTEGER, `committerName` TEXT, `committerEmail` TEXT, `committerDate` INTEGER, `message` TEXT, PRIMARY KEY(`sha`))",
         "fields": [
           {
@@ -76,7 +76,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a250fe6c073b58ef58b9039d0b949a44')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ac91398c60ac4f5feae85921f29c555c')"
     ]
   }
 }

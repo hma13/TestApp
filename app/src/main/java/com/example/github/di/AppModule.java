@@ -8,6 +8,7 @@ import com.example.github.BuildConfig;
 import com.example.github.api.GithubApiClient;
 import com.example.github.api.GithubApiService;
 import com.example.github.db.AppDb;
+import com.example.github.db.CommitListItemEntityDao;
 
 import javax.inject.Singleton;
 
@@ -35,6 +36,12 @@ abstract class AppModule {
     @Provides
     static AppDb provideDb(Application app) {
         return Room.databaseBuilder(app, AppDb.class, "app.db").build();
+    }
+
+    @Singleton
+    @Provides
+    static CommitListItemEntityDao provideCommitListItemEntityDao(AppDb appDb) {
+        return appDb.commitListItemEntityDao();
     }
 
 }

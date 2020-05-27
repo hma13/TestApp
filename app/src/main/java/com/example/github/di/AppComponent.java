@@ -1,5 +1,7 @@
 package com.example.github.di;
 
+import android.app.Application;
+
 import com.example.github.MyApp;
 
 import javax.inject.Singleton;
@@ -27,7 +29,7 @@ public interface AppComponent {
     interface Builder {
 
         @BindsInstance
-        Builder application(MyApp application);
+        Builder application(Application application);
 
         AppComponent build();
     }

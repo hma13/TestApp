@@ -9,6 +9,6 @@ import androidx.room.RoomDatabase;
 )
 //@TypeConverters(AppTypeConverters.class)
 public abstract class AppDb extends RoomDatabase {
-    abstract CommitListItemEntityDao commitListItemEntityDao();
+    public abstract CommitListItemEntityDao commitListItemEntityDao();
 //    abstract CommitDetailDao commitDetailDao();
 }

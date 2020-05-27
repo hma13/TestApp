@@ -5,21 +5,21 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.github.data.CommitListItem;
+import com.example.github.db.CommitListItemEntity;
 import com.example.github.repository.CommitRepository;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import okhttp3.ResponseBody;
 import timber.log.Timber;
 
 public class CommitListFragmentViewModel extends ViewModel {
     private CommitRepository commitRepository;
     private MutableLiveData<Boolean> fetchingLiveData = new MutableLiveData<>();
-    private MutableLiveData<Pair<List<CommitListItem>, Throwable>> commitsLiveData = new MutableLiveData<>();
+    private MutableLiveData<Pair<List<CommitListItemEntity>, Throwable>> commitsLiveData = new MutableLiveData<>();
     private Disposable disposable;
 
     @Inject
@@ -29,21 +29,18 @@ public class CommitListFragmentViewModel extends ViewModel {
 
     void fetchCommits() {
         //passes null to branchName for 'master' branch
-        disposable = commitRepository.getCommits("hma13", "TestApp", null)
-                .doOnSubscribe(disposable -> fetchingLiveData.postValue(true))
+        disposable = commitRepository.getCommits("hma13", "TestApp", null, false)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnSubscribe(disposable -> fetchingLiveData.setValue(true))
                 .doAfterTerminate(() -> fetchingLiveData.setValue(false))
-                .subscribe((response, throwable) -> {
+                .subscribe((commitListItemEntities, throwable) -> {
                     if (throwable != null) {
                         Timber.e(throwable);
                         commitsLiveData.setValue(Pair.create(null, throwable));
                     } else {
-                        if (response.isSuccessful() && response.body() != null) {
-                            Timber.d("size: %d", response.body().size());
-                            commitsLiveData.setValue(Pair.create(response.body(), null));
-                        } else {
-                            ResponseBody errorBody = response.errorBody();
-                            Timber.e(errorBody != null ? errorBody.string() : "Error response");
-                        }
+                        Timber.d("size: %d", commitListItemEntities.size());
+                        commitsLiveData.setValue(Pair.create(commitListItemEntities, null));
+
                     }
                 });
 
@@ -61,7 +58,7 @@ public class CommitListFragmentViewModel extends ViewModel {
         return fetchingLiveData;
     }
 
-    LiveData<Pair<List<CommitListItem>, Throwable>> getCommitsLiveData() {
+    LiveData<Pair<List<CommitListItemEntity>, Throwable>> getCommitsLiveData() {
         return commitsLiveData;
     }
 }

@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentFactory;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.github.R;
-import com.example.github.data.CommitListItem;
+import com.example.github.db.CommitListItemEntity;
 import com.example.github.util.TaskExecutorWithIdlingResourceRule;
 import com.example.github.util.ViewModelUtil;
 
@@ -33,7 +33,7 @@ public class CommitListFragmentTest {
     public TaskExecutorWithIdlingResourceRule executorRule = new TaskExecutorWithIdlingResourceRule();
 
     private CommitListFragmentViewModel mockViewModel;
-    private MutableLiveData<Pair<List<CommitListItem>, Throwable>> commitsLiveData = new MutableLiveData<>();
+    private MutableLiveData<Pair<List<CommitListItemEntity>, Throwable>> commitsLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> fetchingLiveData = new MutableLiveData<>();
     private FragmentFactory fragmentFactory = new FragmentFactory() {
         @NonNull
@@ -55,8 +55,8 @@ public class CommitListFragmentTest {
 
     @Test
     public void testSuccess() {
-        List<CommitListItem> list = new ArrayList<>();
-        CommitListItem sha = new CommitListItem("sha");
+        List<CommitListItemEntity> list = new ArrayList<>();
+        CommitListItemEntity sha = new CommitListItemEntity("sha");
         list.add(sha);
         commitsLiveData.postValue(Pair.create(list, null));
         onView(allOf(withText("sha"), withId(R.id.hash))).check(matches(isDisplayed()));

@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey;
 import com.example.github.data.CommitInfo;
 import com.example.github.data.CommitListItem;
 
-@Entity
+@Entity(tableName = "commit_list_item")
 public class CommitListItemEntity {
     @PrimaryKey
     @NonNull
