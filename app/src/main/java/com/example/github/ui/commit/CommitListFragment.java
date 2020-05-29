@@ -57,7 +57,7 @@ public class CommitListFragment extends Fragment implements Injectable {
         DividerItemDecoration decor = new DividerItemDecoration(activity, layoutManager.getOrientation());
         binding.commitList.addItemDecoration(decor);
 
-        binding.container.setOnRefreshListener(() -> viewModel.fetchCommits());
+        binding.container.setOnRefreshListener(() -> viewModel.fetchCommits(true));
 
         return binding.getRoot();
     }
@@ -66,7 +66,7 @@ public class CommitListFragment extends Fragment implements Injectable {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initViewModel();
-        viewModel.fetchCommits();
+        viewModel.fetchCommits(false);
     }
 
     private void initViewModel() {

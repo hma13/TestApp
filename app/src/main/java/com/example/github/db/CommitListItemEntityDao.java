@@ -8,7 +8,7 @@ import androidx.room.Query;
 import java.util.List;
 
 import io.reactivex.Completable;
-import io.reactivex.Single;
+import io.reactivex.Flowable;
 
 @Dao
 public interface CommitListItemEntityDao {
@@ -16,5 +16,5 @@ public interface CommitListItemEntityDao {
     Completable insert(CommitListItemEntity... entities);
 
     @Query("SELECT * FROM commit_list_item")
-    Single<List<CommitListItemEntity>> getCommits();
+    Flowable<List<CommitListItemEntity>> getCommits();
 }

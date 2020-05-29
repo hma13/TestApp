@@ -8,6 +8,8 @@ import androidx.room.PrimaryKey;
 import com.example.github.data.CommitInfo;
 import com.example.github.data.CommitListItem;
 
+import java.util.Objects;
+
 @Entity(tableName = "commit_list_item")
 public class CommitListItemEntity {
     @PrimaryKey
@@ -125,4 +127,26 @@ public class CommitListItemEntity {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CommitListItemEntity that = (CommitListItemEntity) o;
+        return sha.equals(that.sha) &&
+                url.equals(that.url) &&
+                authorName.equals(that.authorName) &&
+                authorEmail.equals(that.authorEmail) &&
+                authorDate.equals(that.authorDate) &&
+                committerName.equals(that.committerName) &&
+                committerEmail.equals(that.committerEmail) &&
+                committerDate.equals(that.committerDate) &&
+                Objects.equals(message, that.message);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sha, url, authorName, authorEmail, authorDate, committerName, committerEmail, committerDate, message);
+    }
+
 }

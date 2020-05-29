@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
@@ -27,21 +28,25 @@ public class CommitListFragmentViewModel extends ViewModel {
         this.commitRepository = commitRepository;
     }
 
-    void fetchCommits() {
+    void fetchCommits(boolean force) {
+        if (disposable != null) {
+            disposable.dispose();
+        }
+        Flowable<List<CommitListItemEntity>> commitsFlowable = commitRepository.getCommits("hma13", "TestApp", null);
+        if (force) {
+            commitsFlowable = commitRepository.getRemoteCommits("hma13", "TestApp", null);
+        }
         //passes null to branchName for 'master' branch
-        disposable = commitRepository.getCommits("hma13", "TestApp", null, false)
+        disposable = commitsFlowable
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> fetchingLiveData.setValue(true))
-                .doAfterTerminate(() -> fetchingLiveData.setValue(false))
-                .subscribe((commitListItemEntities, throwable) -> {
-                    if (throwable != null) {
-                        Timber.e(throwable);
-                        commitsLiveData.setValue(Pair.create(null, throwable));
-                    } else {
-                        Timber.d("size: %d", commitListItemEntities.size());
-                        commitsLiveData.setValue(Pair.create(commitListItemEntities, null));
-
-                    }
+                .doOnNext((list) -> fetchingLiveData.setValue(false))
+                .subscribe(commitListItemEntities -> {
+                    Timber.d("size: %d", commitListItemEntities.size());
+                    commitsLiveData.setValue(Pair.create(commitListItemEntities, null));
+                }, throwable -> {
+                    Timber.e(throwable);
+                    commitsLiveData.setValue(Pair.create(null, throwable));
                 });
 
     }
