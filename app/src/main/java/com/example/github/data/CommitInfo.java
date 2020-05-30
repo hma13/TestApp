@@ -1,5 +1,9 @@
 package com.example.github.data;
 
+import androidx.room.Embedded;
+
+import java.util.Objects;
+
 /**
  * "commit": {
  * "author": {
@@ -28,7 +32,9 @@ package com.example.github.data;
  * },
  */
 public class CommitInfo {
+    @Embedded(prefix = "author")
     private PersonalInfo author;
+    @Embedded(prefix = "committer")
     private PersonalInfo committer;
     private String message;
 
@@ -46,6 +52,33 @@ public class CommitInfo {
 
     public String getAuthorName() {
         return author != null ? author.getName() : null;
+    }
+
+    public void setAuthor(PersonalInfo author) {
+        this.author = author;
+    }
+
+    public void setCommitter(PersonalInfo committer) {
+        this.committer = committer;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CommitInfo that = (CommitInfo) o;
+        return Objects.equals(author, that.author) &&
+                Objects.equals(committer, that.committer) &&
+                Objects.equals(message, that.message);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(author, committer, message);
     }
 
     @Override
@@ -72,6 +105,33 @@ public class CommitInfo {
 
         public Long getDate() {
             return date;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public void setDate(Long date) {
+            this.date = date;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            PersonalInfo that = (PersonalInfo) o;
+            return Objects.equals(name, that.name) &&
+                    Objects.equals(email, that.email) &&
+                    Objects.equals(date, that.date);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(name, email, date);
         }
 
         @Override

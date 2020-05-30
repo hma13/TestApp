@@ -1,6 +1,7 @@
 package com.example.github.db;
 
 import androidx.annotation.NonNull;
+import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -11,18 +12,13 @@ import com.example.github.data.CommitListItem;
 import java.util.Objects;
 
 @Entity(tableName = "commit_list_item")
-public class CommitListItemEntity {
+public class CommitListItemEntity extends BaseEntity {
     @PrimaryKey
     @NonNull
     private String sha;
     private String url;
-    private String authorName;
-    private String authorEmail;
-    private Long authorDate;
-    private String committerName;
-    private String committerEmail;
-    private Long committerDate;
-    private String message;
+    @Embedded
+    private CommitInfo commitInfo;
 
     public CommitListItemEntity() {
     }
@@ -33,20 +29,7 @@ public class CommitListItemEntity {
         this.url = item.getUrl();
         CommitInfo commitInfo = item.getCommitInfo();
         if (commitInfo != null) {
-            this.message = commitInfo.getMessage();
-            CommitInfo.PersonalInfo author = commitInfo.getAuthor();
-            if (author != null) {
-                authorName = author.getName();
-                authorEmail = author.getEmail();
-                authorDate = author.getDate();
-            }
-
-            CommitInfo.PersonalInfo committer = commitInfo.getCommitter();
-            if (committer != null) {
-                committerName = committer.getName();
-                committerEmail = committer.getEmail();
-                committerDate = committer.getDate();
-            }
+            this.commitInfo = commitInfo;
         }
 
     }
@@ -64,34 +47,6 @@ public class CommitListItemEntity {
         return url;
     }
 
-    public String getAuthorName() {
-        return authorName;
-    }
-
-    public String getAuthorEmail() {
-        return authorEmail;
-    }
-
-    public Long getAuthorDate() {
-        return authorDate;
-    }
-
-    public String getCommitterName() {
-        return committerName;
-    }
-
-    public String getCommitterEmail() {
-        return committerEmail;
-    }
-
-    public Long getCommitterDate() {
-        return committerDate;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
     public void setSha(String sha) {
         this.sha = sha;
     }
@@ -100,32 +55,12 @@ public class CommitListItemEntity {
         this.url = url;
     }
 
-    public void setAuthorName(String authorName) {
-        this.authorName = authorName;
+    public CommitInfo getCommitInfo() {
+        return commitInfo;
     }
 
-    public void setAuthorEmail(String authorEmail) {
-        this.authorEmail = authorEmail;
-    }
-
-    public void setAuthorDate(Long authorDate) {
-        this.authorDate = authorDate;
-    }
-
-    public void setCommitterName(String committerName) {
-        this.committerName = committerName;
-    }
-
-    public void setCommitterEmail(String committerEmail) {
-        this.committerEmail = committerEmail;
-    }
-
-    public void setCommitterDate(Long committerDate) {
-        this.committerDate = committerDate;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
+    public void setCommitInfo(CommitInfo commitInfo) {
+        this.commitInfo = commitInfo;
     }
 
     @Override
@@ -135,18 +70,31 @@ public class CommitListItemEntity {
         CommitListItemEntity that = (CommitListItemEntity) o;
         return sha.equals(that.sha) &&
                 url.equals(that.url) &&
-                authorName.equals(that.authorName) &&
-                authorEmail.equals(that.authorEmail) &&
-                authorDate.equals(that.authorDate) &&
-                committerName.equals(that.committerName) &&
-                committerEmail.equals(that.committerEmail) &&
-                committerDate.equals(that.committerDate) &&
-                Objects.equals(message, that.message);
+                Objects.equals(commitInfo, that.commitInfo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(sha, url, authorName, authorEmail, authorDate, committerName, committerEmail, committerDate, message);
+        return Objects.hash(sha, url, commitInfo);
     }
 
+    public String getCommitterName() {
+        if (commitInfo != null && commitInfo.getCommitter() != null) {
+            return commitInfo.getCommitter().getName();
+        }
+        return null;
+    }
+
+    public String getMessage() {
+        if (commitInfo != null) {
+            return commitInfo.getMessage();
+        }
+        return null;
+    }
+
+    public void setMessage(String message) {
+        if (commitInfo != null) {
+            commitInfo.setMessage(message);
+        }
+    }
 }

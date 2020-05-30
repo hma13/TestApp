@@ -13,7 +13,7 @@ import retrofit2.http.Query;
 
 public interface GithubApiService {
 
-    @GET("/repos/{owner}/{repo}/commits")
+    @GET("/repos/{owner}/{repo}/commits?per_page=50")
     Single<Response<List<CommitListItem>>> getCommits(@Path("owner") String owner, @Path("repo") String repo, @Query("sha") String branchName);
 
     @GET("/repos/{owner}/{repo}/commits/{commitHash}")

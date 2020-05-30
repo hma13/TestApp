@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "ac91398c60ac4f5feae85921f29c555c",
+    "identityHash": "ced1e5179acfc97d7cef994f2023272e",
     "entities": [
       {
         "tableName": "commit_list_item",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`sha` TEXT NOT NULL, `url` TEXT, `authorName` TEXT, `authorEmail` TEXT, `authorDate` INTEGER, `committerName` TEXT, `committerEmail` TEXT, `committerDate` INTEGER, `message` TEXT, PRIMARY KEY(`sha`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`sha` TEXT NOT NULL, `url` TEXT, `created` INTEGER, `updated` INTEGER, `message` TEXT, `authorname` TEXT, `authoremail` TEXT, `authordate` INTEGER, `committername` TEXT, `committeremail` TEXT, `committerdate` INTEGER, PRIMARY KEY(`sha`))",
         "fields": [
           {
             "fieldPath": "sha",
@@ -21,45 +21,57 @@
             "notNull": false
           },
           {
-            "fieldPath": "authorName",
-            "columnName": "authorName",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "authorEmail",
-            "columnName": "authorEmail",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "authorDate",
-            "columnName": "authorDate",
+            "fieldPath": "created",
+            "columnName": "created",
             "affinity": "INTEGER",
             "notNull": false
           },
           {
-            "fieldPath": "committerName",
-            "columnName": "committerName",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "committerEmail",
-            "columnName": "committerEmail",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "committerDate",
-            "columnName": "committerDate",
+            "fieldPath": "updated",
+            "columnName": "updated",
             "affinity": "INTEGER",
             "notNull": false
           },
           {
-            "fieldPath": "message",
+            "fieldPath": "commitInfo.message",
             "columnName": "message",
             "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "commitInfo.author.name",
+            "columnName": "authorname",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "commitInfo.author.email",
+            "columnName": "authoremail",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "commitInfo.author.date",
+            "columnName": "authordate",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "commitInfo.committer.name",
+            "columnName": "committername",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "commitInfo.committer.email",
+            "columnName": "committeremail",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "commitInfo.committer.date",
+            "columnName": "committerdate",
+            "affinity": "INTEGER",
             "notNull": false
           }
         ],
@@ -76,7 +88,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ac91398c60ac4f5feae85921f29c555c')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ced1e5179acfc97d7cef994f2023272e')"
     ]
   }
 }

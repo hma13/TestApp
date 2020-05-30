@@ -13,6 +13,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 import retrofit2.Response;
@@ -37,7 +38,7 @@ public class CommitRepository {
     @WorkerThread
     public Flowable<List<CommitListItemEntity>> getCommits(String owner, String repo, String branchName) {
         if (commitsFlowable == null) {
-            commitsFlowable = Flowable.concat(getLocalCommits(), getRemoteCommits(owner, repo, branchName))
+            commitsFlowable = Flowable.merge(getLocalCommits(), getRemoteCommits(owner, repo, branchName))
                     .filter(commitListItemEntities -> !commitListItemEntities.isEmpty())
                     .take(1);
         }
@@ -63,13 +64,30 @@ public class CommitRepository {
                     .flattenAsObservable(commitListItems -> commitListItems)
                     .map(CommitListItemEntity::new)
                     .toList()
-                    .flatMapCompletable(remotes -> dao.insert(remotes.toArray(new CommitListItemEntity[0])))
+                    .flatMapCompletable(remotes -> {
+                        CommitListItemEntity[] array = remotes.toArray(new CommitListItemEntity[0]);
+                        return dao.insert(array);
+                    })
                     .andThen(getLocalCommits());
+
         }
         return remoteFlowable;
     }
 
     public Single<Response<CommitDetail>> getCommit(String owner, String repo, String commitHash) {
         return githubApiService.getCommit(owner, repo, commitHash).subscribeOn(schedulers.network()).observeOn(schedulers.main());
+    }
+
+    @WorkerThread
+    public Completable update(String sha) {
+        return dao.getCommitBySha(sha)
+                .subscribeOn(schedulers.single())
+                .map(commitListItemEntity -> {
+                    Timber.d(commitListItemEntity.getSha());
+                    commitListItemEntity.setMessage("Updated");
+                    return commitListItemEntity;
+                })
+                .flatMapCompletable(entity -> dao.update(entity))
+                .doOnComplete(() -> Timber.d("update completed"));
     }
 }

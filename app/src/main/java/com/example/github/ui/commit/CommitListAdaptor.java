@@ -23,7 +23,7 @@ public class CommitListAdaptor extends RecyclerView.Adapter<CommitViewHolder> {
         this.commits = new ArrayList<>();
     }
 
-    private CommitListItemEntity getItem(int position) {
+    CommitListItemEntity getItem(int position) {
         return commits.get(position);
     }
 

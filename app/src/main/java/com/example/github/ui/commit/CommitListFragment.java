@@ -2,6 +2,9 @@ package com.example.github.ui.commit;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -36,6 +39,7 @@ public class CommitListFragment extends Fragment implements Injectable {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         compositeDisposable = new CompositeDisposable();
+        setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
     }
 
@@ -88,6 +92,20 @@ public class CommitListFragment extends Fragment implements Injectable {
         });
     }
 
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.commit_list_fragment, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (R.id.menu_test == id) {
+            viewModel.update(commitListAdaptor.getItem(0).getSha());
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void onStop() {

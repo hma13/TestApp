@@ -66,4 +66,10 @@ public class CommitListFragmentViewModel extends ViewModel {
     LiveData<Pair<List<CommitListItemEntity>, Throwable>> getCommitsLiveData() {
         return commitsLiveData;
     }
+
+    public void update(String sha) {
+        commitRepository.update(sha).subscribe(() -> {
+            Timber.d("updated");
+        });
+    }
 }
